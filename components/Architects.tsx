@@ -1,48 +1,40 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useInViewport } from '@/hooks/use-in-viewport';
 
 const architects = [
   {
     name: 'Mira Okafor',
+    initials: 'MO',
     role: 'Founder, Ledger Studio',
     quote: 'The best weekend I have wasted all year.',
-    img: 'https://images.pexels.com/photos/4158298/pexels-photo-4158298.jpeg?auto=compress&cs=tinysrgb&w=600',
+    gradient: 'from-primary/30 to-tertiary/20',
   },
   {
     name: 'Theo Lindqvist',
+    initials: 'TL',
     role: 'Systems engineer, Volta',
     quote: 'I came for the coffee. I left with a co-founder.',
-    img: 'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=600',
+    gradient: 'from-tertiary/30 to-primary/20',
   },
   {
     name: 'Sana Verma',
+    initials: 'SV',
     role: 'Designer, Plinth',
     quote: 'No swag, no stages. Just the work. Finally.',
-    img: 'https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=600',
+    gradient: 'from-primary/20 to-secondary/20',
   },
   {
     name: 'Jonas Brandt',
+    initials: 'JB',
     role: 'Independent, ex-Atlas',
     quote: 'I shipped a thing I had been postponing for two years.',
-    img: 'https://images.pexels.com/photos/1681010/pexels-photo-1681010.jpeg?auto=compress&cs=tinysrgb&w=600',
+    gradient: 'from-secondary/30 to-primary/20',
   },
 ];
 
 export default function Architects() {
-  const ref = useRef<HTMLDivElement>(null);
-  const [visible, setVisible] = useState(false);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const obs = new IntersectionObserver(
-      ([e]) => e.isIntersecting && setVisible(true),
-      { threshold: 0.1 }
-    );
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, []);
+  const { ref, visible } = useInViewport(0.1);
 
   return (
     <section id="architects" ref={ref} className="relative px-6 py-section-gap">
@@ -71,12 +63,11 @@ export default function Architects() {
               style={{ transitionDelay: `${i * 100}ms` }}
             >
               <div className="relative mb-5 aspect-[4/5] overflow-hidden rounded-xl border border-white/10">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={a.img}
-                  alt={a.name}
-                  className="h-full w-full object-cover grayscale transition-all duration-700 group-hover:grayscale-0 group-hover:scale-105"
-                />
+                <div className={`flex h-full w-full items-center justify-center bg-gradient-to-br ${a.gradient}`}>
+                  <span className="font-space text-5xl font-bold tracking-wider text-on-surface/40 sm:text-6xl">
+                    {a.initials}
+                  </span>
+                </div>
                 <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent" />
               </div>
               <h3 className="font-space text-lg font-medium text-on-surface">
