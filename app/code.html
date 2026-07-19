@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>TechMate Hackathon | Code the Future</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;family=Inter:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<!-- Icons -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Three.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.0/three.min.js"></script>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-background": "#e5e1e6",
+                    "background": "#010102",
+                    "on-tertiary-fixed-variant": "#4c406a",
+                    "surface-variant": "#353438",
+                    "primary-fixed": "#eddcff",
+                    "on-secondary-fixed": "#1b1834",
+                    "on-secondary-fixed-variant": "#464362",
+                    "on-secondary-container": "#bdb7dd",
+                    "surface": "#131316",
+                    "surface-bright": "#39393c",
+                    "tertiary": "#cfbff0",
+                    "secondary-fixed": "#e4dfff",
+                    "primary-fixed-dim": "#d3beed",
+                    "inverse-primary": "#685780",
+                    "secondary-container": "#4b4867",
+                    "on-primary-container": "#f7ecff",
+                    "on-error-container": "#ffdad6",
+                    "on-error": "#690005",
+                    "error-container": "#93000a",
+                    "on-surface": "#e5e1e6",
+                    "surface-container-lowest": "#0e0e11",
+                    "surface-container-low": "#1c1b1f",
+                    "surface-container-high": "#2a292d",
+                    "surface-container": "#201f23",
+                    "secondary": "#c8c2e8",
+                    "inverse-on-surface": "#313034",
+                    "primary-container": "#77658f",
+                    "on-primary-fixed": "#231338",
+                    "inverse-surface": "#e5e1e6",
+                    "on-primary-fixed-variant": "#503f67",
+                    "on-secondary": "#302d4b",
+                    "tertiary-container": "#736692",
+                    "on-tertiary-container": "#f5ecff",
+                    "outline-variant": "#4a454d",
+                    "surface-dim": "#131316",
+                    "outline": "#958e98",
+                    "on-surface-variant": "#cbc4ce",
+                    "primary": "#d3beed",
+                    "surface-container-highest": "#353438",
+                    "tertiary-fixed": "#e9ddff",
+                    "tertiary-fixed-dim": "#cfbff0",
+                    "secondary-fixed-dim": "#c8c2e8",
+                    "surface-tint": "#d3beed",
+                    "on-tertiary-fixed": "#20143b",
+                    "on-primary": "#39294f",
+                    "error": "#ffb4ab",
+                    "on-tertiary": "#352952"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "section-gap": "80px",
+                    "gutter": "24px",
+                    "base": "8px",
+                    "container-padding": "24px"
+            },
+            "fontFamily": {
+                    "body-md": ["Inter", "sans-serif"],
+                    "headline-lg": ["Space Grotesk", "sans-serif"],
+                    "display-lg": ["Space Grotesk", "sans-serif"],
+                    "label-sm": ["JetBrains Mono", "monospace"],
+                    "headline-lg-mobile": ["Space Grotesk", "sans-serif"]
+            },
+            "fontSize": {
+                    "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "headline-lg": ["40px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                    "display-lg": ["72px", {"lineHeight": "1.1", "letterSpacing": "-0.04em", "fontWeight": "700"}],
+                    "label-sm": ["12px", {"lineHeight": "1.5", "letterSpacing": "0.1em", "fontWeight": "500"}],
+                    "headline-lg-mobile": ["32px", {"lineHeight": "1.2", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #010102;
+            color: #e5e1e6;
+            overflow-x: hidden;
+        }
+        #particles-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+        .glass-panel {
+            background: rgba(36, 33, 62, 0.4);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(119, 101, 143, 0.3);
+            box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.05);
+        }
+        .glow-border {
+            border: 1px solid #77658F;
+            box-shadow: 0 0 15px rgba(119, 101, 143, 0.4);
+        }
+        .primary-btn {
+            background-color: #77658F;
+            color: #010102;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .primary-btn:hover {
+            box-shadow: 0 0 20px rgba(119, 101, 143, 0.5);
+            filter: brightness(1.15);
+        }
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 1s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .monogram-box {
+            background: linear-gradient(135deg, #24213E 0%, #0e0e11 100%);
+            border: 1px solid #464362;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        #hero-animation-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+        #mission-animation-container {
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        /* Custom delay classes */
+        .delay-100 { transition-delay: 100ms; }
+        .delay-200 { transition-delay: 200ms; }
+        .delay-300 { transition-delay: 300ms; }
+        .delay-400 { transition-delay: 400ms; }
+    </style>
+</head>
+<body class="font-body-md text-on-surface">
+<!-- Three.js Background Particles -->
+<div id="particles-background"></div>
+<!-- TopNavBar -->
+<nav class="w-full top-0 sticky z-50 bg-background/60 backdrop-blur-xl border-b border-outline-variant/10">
+<div class="flex justify-between items-center px-container-padding py-base max-w-[1200px] mx-auto">
+<div class="flex items-center gap-2">
+
+<div class="font-headline-lg text-headline-lg text-primary tracking-tighter">TechMate</div>
+</div>
+<div class="hidden md:flex gap-8">
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors" href="#">Challenges</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors" href="#">Schedule</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors" href="#">Sponsors</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors" href="#">FAQ</a>
+</div>
+<button class="primary-btn px-6 py-2 rounded font-label-sm text-label-sm uppercase tracking-widest active:scale-95">
+                Register
+            </button>
+</div>
+</nav>
+<!-- Hero Section -->
+<header class="relative min-h-screen flex items-center justify-center overflow-hidden">
+<!-- 3D Animation Container -->
+<div class="flex items-center justify-center" id="hero-animation-container">
+
+</div>
+<div class="relative z-10 px-container-padding text-center max-w-[900px]">
+<h1 class="font-display-lg text-[48px] md:text-display-lg text-primary mb-base reveal active">
+                TechMate: <br/>Code the Future
+            </h1>
+<!-- Countdown Timer -->
+<div class="grid grid-cols-4 gap-base md:gap-gutter mt-section-gap reveal active delay-200" id="countdown">
+<div class="glass-panel p-4 rounded-xl border-primary/20">
+<span class="block font-headline-lg text-primary" id="days">24</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">DAYS</span>
+</div>
+<div class="glass-panel p-4 rounded-xl border-primary/20">
+<span class="block font-headline-lg text-primary" id="hours">12</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">HOURS</span>
+</div>
+<div class="glass-panel p-4 rounded-xl border-primary/20">
+<span class="block font-headline-lg text-primary" id="minutes">45</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">MINS</span>
+</div>
+<div class="glass-panel p-4 rounded-xl border-primary/20">
+<span class="block font-headline-lg text-primary" id="seconds">08</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">SECS</span>
+</div>
+</div>
+<div class="mt-gutter flex flex-col md:flex-row gap-base justify-center reveal active delay-300">
+<a class="primary-btn px-10 py-4 rounded font-label-sm text-label-sm uppercase tracking-widest flex items-center justify-center gap-2" href="#register">
+                    Start Building <span class="material-symbols-outlined">terminal</span>
+</a>
+</div>
+</div>
+</header>
+<!-- Hackathon Description -->
+<section class="py-section-gap px-container-padding max-w-[1200px] mx-auto grid md:grid-cols-2 gap-section-gap items-center reveal">
+<div class="reveal">
+<h2 class="font-headline-lg text-headline-lg text-primary mb-base">The Mission</h2>
+<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+                48 hours of pure creation. Join hundreds of builders to solve the world's toughest problems through high-performance engineering and collaborative innovation. TechMate isn't just a competition; it's an accelerator for the next generation of technical visionaries.
+            </p>
+<div class="mt-gutter grid grid-cols-2 gap-base">
+<div class="border-l-2 border-primary pl-4 py-2">
+<span class="font-label-sm text-primary block">PARTICIPANTS</span>
+<span class="font-headline-lg text-3xl">500+</span>
+</div>
+<div class="border-l-2 border-secondary pl-4 py-2">
+<span class="font-label-sm text-secondary block">PRIZE POOL</span>
+<span class="font-headline-lg text-3xl">$50k</span>
+</div>
+</div>
+</div>
+<div class="relative h-[400px] rounded-2xl overflow-hidden glass-panel glow-border reveal delay-200">
+<!-- Second instance of 3D animation for The Mission -->
+<div id="mission-animation-container"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-background to-transparent pointer-events-none"></div>
+</div>
+</section>
+<!-- Registration Section -->
+<section class="py-section-gap px-container-padding bg-surface-container-lowest/50 reveal" id="register">
+<div class="max-w-[800px] mx-auto glass-panel p-gutter md:p-section-gap rounded-2xl reveal">
+<div class="text-center mb-gutter">
+<h2 class="font-headline-lg text-headline-lg text-primary mb-2">Claim Your Slot</h2>
+<p class="font-body-md text-on-surface-variant">Entry is limited to elite technical talent. Apply now.</p>
+</div>
+<form class="space-y-gutter">
+<div class="grid md:grid-cols-2 gap-gutter">
+<div class="space-y-2">
+<label class="font-label-sm text-label-sm text-primary block uppercase">Full Name</label>
+<input class="w-full bg-transparent border-0 border-b border-outline-variant focus:border-primary focus:ring-0 text-on-surface font-body-md py-3 transition-colors placeholder:text-outline-variant/30" placeholder="ALAN TURING" type="text"/>
+</div>
+<div class="space-y-2">
+<label class="font-label-sm text-label-sm text-primary block uppercase">Email Address</label>
+<input class="w-full bg-transparent border-0 border-b border-outline-variant focus:border-primary focus:ring-0 text-on-surface font-body-md py-3 transition-colors placeholder:text-outline-variant/30" placeholder="ENIGMA@TECHMATE.IO" type="email"/>
+</div>
+</div>
+<div class="space-y-2">
+<label class="font-label-sm text-label-sm text-primary block uppercase">GitHub Profile</label>
+<input class="w-full bg-transparent border-0 border-b border-outline-variant focus:border-primary focus:ring-0 text-on-surface font-body-md py-3 transition-colors placeholder:text-outline-variant/30" placeholder="GITHUB.COM/YOUR_PROFILE" type="url"/>
+</div>
+<button class="w-full primary-btn py-4 rounded font-label-sm text-label-sm uppercase tracking-[0.2em] mt-gutter border-0" type="submit">
+                    Register Now
+                </button>
+</form>
+</div>
+</section>
+<!-- Organizers Section -->
+<section class="py-section-gap px-container-padding max-w-[1200px] mx-auto text-center reveal">
+<h2 class="font-headline-lg text-headline-lg text-primary mb-section-gap reveal">The Architects</h2>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-gutter">
+<!-- Organizer Card 1 -->
+<div class="group reveal delay-100">
+<div class="monogram-box aspect-square rounded-2xl flex items-center justify-center mb-base group-hover:glow-border transition-all duration-500">
+<span class="font-display-lg text-4xl text-outline-variant group-hover:text-primary transition-colors">AX</span>
+</div>
+<h3 class="font-body-md font-bold text-on-surface">Alex Chen</h3>
+<p class="font-label-sm text-on-surface-variant">Core Engine</p>
+</div>
+<!-- Organizer Card 2 -->
+<div class="group reveal delay-200">
+<div class="monogram-box aspect-square rounded-2xl flex items-center justify-center mb-base group-hover:glow-border transition-all duration-500">
+<span class="font-display-lg text-4xl text-outline-variant group-hover:text-primary transition-colors">SR</span>
+</div>
+<h3 class="font-body-md font-bold text-on-surface">Sarah Rivera</h3>
+<p class="font-label-sm text-on-surface-variant">Operations</p>
+</div>
+<!-- Organizer Card 3 -->
+<div class="group reveal delay-300">
+<div class="monogram-box aspect-square rounded-2xl flex items-center justify-center mb-base group-hover:glow-border transition-all duration-500">
+<span class="font-display-lg text-4xl text-outline-variant group-hover:text-primary transition-colors">JT</span>
+</div>
+<h3 class="font-body-md font-bold text-on-surface">James Thorne</h3>
+<p class="font-label-sm text-on-surface-variant">Lead Designer</p>
+</div>
+<!-- Organizer Card 4 -->
+<div class="group reveal delay-400">
+<div class="monogram-box aspect-square rounded-2xl flex items-center justify-center mb-base group-hover:glow-border transition-all duration-500">
+<span class="font-display-lg text-4xl text-outline-variant group-hover:text-primary transition-colors">ML</span>
+</div>
+<h3 class="font-body-md font-bold text-on-surface">Maya Lin</h3>
+<p class="font-label-sm text-on-surface-variant">Partnerships</p>
+</div>
+</div>
+</section>
+<!-- Footer -->
+<footer class="w-full py-section-gap bg-surface-container-lowest/50 border-t border-outline-variant/10 reveal">
+<div class="flex flex-col md:flex-row justify-between items-center px-container-padding max-w-[1200px] mx-auto gap-gutter">
+<div class="flex flex-col items-center md:items-start">
+<div class="font-headline-lg text-headline-lg text-on-surface mb-2">TechMate</div>
+<p class="font-label-sm text-label-sm text-outline">© 2024 TechMate Hackathon. Built for the future.</p>
+</div>
+<div class="flex flex-wrap justify-center gap-gutter">
+<a class="font-label-sm text-label-sm text-outline hover:text-tertiary transition-colors" href="#">Privacy Policy</a>
+<a class="font-label-sm text-label-sm text-outline hover:text-tertiary transition-colors" href="#">Terms</a>
+<a class="font-label-sm text-label-sm text-outline hover:text-tertiary transition-colors" href="#">Twitter</a>
+<a class="font-label-sm text-label-sm text-outline hover:text-tertiary transition-colors" href="#">GitHub</a>
+<a class="font-label-sm text-label-sm text-outline hover:text-tertiary transition-colors" href="#">Discord</a>
+</div>
+</div>
+</footer>
+<script>
+        // Background Particles Animation
+        function initBackgroundParticles() {
+            const container = document.getElementById('particles-background');
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+            
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            container.appendChild(renderer.domElement);
+
+            const particlesCount = 1500;
+            const posArray = new Float32Array(particlesCount * 3);
+            const velocityArray = new Float32Array(particlesCount);
+            
+            for(let i = 0; i < particlesCount * 3; i++) {
+                posArray[i] = (Math.random() - 0.5) * 15;
+            }
+
+            for(let i = 0; i < particlesCount; i++) {
+                velocityArray[i] = 0.005 + Math.random() * 0.01;
+            }
+
+            const particlesGeometry = new THREE.BufferGeometry();
+            particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+
+            const particlesMaterial = new THREE.PointsMaterial({
+                size: 0.02,
+                color: 0x77658F,
+                transparent: true,
+                opacity: 0.6,
+                blending: THREE.AdditiveBlending
+            });
+
+            // Alternate colors for "glowing tech bits"
+            const particlesPoints = new THREE.Points(particlesGeometry, particlesMaterial);
+            scene.add(particlesPoints);
+
+            camera.position.z = 5;
+
+            let mouseX = 0;
+            let mouseY = 0;
+
+            window.addEventListener('mousemove', (event) => {
+                mouseX = (event.clientX / window.innerWidth - 0.5) * 0.5;
+                mouseY = (event.clientY / window.innerHeight - 0.5) * 0.5;
+            });
+
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+
+            function animate() {
+                requestAnimationFrame(animate);
+                
+                const positions = particlesGeometry.attributes.position.array;
+                for(let i = 0; i < particlesCount; i++) {
+                    // Update Y position (falling)
+                    positions[i * 3 + 1] -= velocityArray[i];
+                    
+                    // Reset position if it goes below screen
+                    if(positions[i * 3 + 1] < -5) {
+                        positions[i * 3 + 1] = 5;
+                        positions[i * 3] = (Math.random() - 0.5) * 15;
+                        positions[i * 3 + 2] = (Math.random() - 0.5) * 15;
+                    }
+                }
+                
+                particlesGeometry.attributes.position.needsUpdate = true;
+                
+                // Subtle rotation based on mouse
+                particlesPoints.rotation.y += 0.0005 + mouseX * 0.01;
+                particlesPoints.rotation.x += 0.0002 + mouseY * 0.01;
+
+                renderer.render(scene, camera);
+            }
+            animate();
+        }
+        initBackgroundParticles();
+
+        // Custom Element for Threejs Scenes
+        class ThreeJSScene extends HTMLElement {
+            connectedCallback() {
+                const src = this.getAttribute('src');
+                if (!src) return;
+                
+                const containerId = 'threejs-container-' + Math.random().toString(36).substr(2, 9);
+                this.id = containerId;
+                
+                const wrapper = document.createElement('div');
+                wrapper.id = 'threejs-container-LOGO_ANIMATION';
+                wrapper.style.width = '100%';
+                wrapper.style.height = '100%';
+                this.appendChild(wrapper);
+
+                const script = document.createElement('script');
+                script.textContent = src.replace('threejs-container-LOGO_ANIMATION', wrapper.id);
+                this.appendChild(script);
+            }
+        }
+        customElements.define('threejs-scene', ThreeJSScene);
+
+        // Initial default 3D Animation for background mission section
+        function initThreeAnimation(containerId) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+
+            const width = container.clientWidth || window.innerWidth;
+            const height = container.clientHeight || window.innerHeight;
+
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+
+            renderer.setSize(width, height);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            container.appendChild(renderer.domElement);
+
+            const geometry = new THREE.OctahedronGeometry(2, 2);
+            const material = new THREE.MeshPhongMaterial({
+                color: 0x77658F,
+                wireframe: true,
+                transparent: true,
+                opacity: 0.8,
+                shininess: 100
+            });
+
+            const octahedron = new THREE.Mesh(geometry, material);
+            scene.add(octahedron);
+
+            const coreGeo = new THREE.IcosahedronGeometry(0.8, 0);
+            const coreMat = new THREE.MeshBasicMaterial({ color: 0xd3beed, wireframe: false });
+            const core = new THREE.Mesh(coreGeo, coreMat);
+            scene.add(core);
+
+            const light1 = new THREE.PointLight(0xd3beed, 2, 100);
+            light1.position.set(5, 5, 5);
+            scene.add(light1);
+
+            const light2 = new THREE.AmbientLight(0x404040);
+            scene.add(light2);
+
+            camera.position.z = 8;
+
+            let mouseX = 0;
+            let mouseY = 0;
+
+            window.addEventListener('mousemove', (e) => {
+                mouseX = (e.clientX - window.innerWidth / 2) / 100;
+                mouseY = (e.clientY - window.innerHeight / 2) / 100;
+            });
+
+            function animate() {
+                requestAnimationFrame(animate);
+                octahedron.rotation.x += 0.005;
+                octahedron.rotation.y += 0.01;
+                core.rotation.y -= 0.02;
+                core.scale.setScalar(1 + Math.sin(Date.now() * 0.002) * 0.1);
+                octahedron.position.x += (mouseX - octahedron.position.x) * 0.05;
+                octahedron.position.y += (-mouseY - octahedron.position.y) * 0.05;
+                renderer.render(scene, camera);
+            }
+            animate();
+        }
+
+        // Initialize remaining animations
+        initThreeAnimation('mission-animation-container');
+
+        // Reveal Animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: "0px 0px -50px 0px"
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // Countdown Timer Logic
+        function updateCountdown() {
+            const targetDate = new Date();
+            targetDate.setDate(targetDate.getDate() + 23);
+            
+            setInterval(() => {
+                const now = new Date().getTime();
+                const distance = targetDate.getTime() - now;
+                if (distance < 0) return;
+                const d = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const h = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const m = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const s = Math.floor((distance % (1000 * 60)) / 1000);
+                const daysEl = document.getElementById('days');
+                const hoursEl = document.getElementById('hours');
+                const minsEl = document.getElementById('minutes');
+                const secsEl = document.getElementById('seconds');
+                if(daysEl) daysEl.innerText = d.toString().padStart(2, '0');
+                if(hoursEl) hoursEl.innerText = h.toString().padStart(2, '0');
+                if(minsEl) minsEl.innerText = m.toString().padStart(2, '0');
+                if(secsEl) secsEl.innerText = s.toString().padStart(2, '0');
+            }, 1000);
+        }
+        updateCountdown();
+
+        // Subtle Mouse Move Interactive Effect for Glass Panels
+        document.addEventListener('mousemove', (e) => {
+            const panels = document.querySelectorAll('.glass-panel');
+            const x = e.clientX;
+            const y = e.clientY;
+            panels.forEach(panel => {
+                const rect = panel.getBoundingClientRect();
+                const px = x - rect.left;
+                const py = y - rect.top;
+                if (px > 0 && py > 0 && px < rect.width && py < rect.height) {
+                    panel.style.background = `radial-gradient(circle at ${px}px ${py}px, rgba(119, 101, 143, 0.15) 0%, rgba(36, 33, 62, 0.4) 50%)`;
+                } else {
+                    panel.style.background = 'rgba(36, 33, 62, 0.4)';
+                }
+            });
+        });
+    </script>
+</body></html>
