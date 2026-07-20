@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useInViewport } from '@/hooks/use-in-viewport';
 
 const schedule = [
   {
@@ -42,19 +42,7 @@ const schedule = [
 ];
 
 export default function Build() {
-  const ref = useRef<HTMLDivElement>(null);
-  const [visible, setVisible] = useState(false);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const obs = new IntersectionObserver(
-      ([e]) => e.isIntersecting && setVisible(true),
-      { threshold: 0.1 }
-    );
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, []);
+  const { ref, visible } = useInViewport(0.1);
 
   return (
     <section id="build" ref={ref} className="relative px-6 py-section-gap">

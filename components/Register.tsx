@@ -1,7 +1,8 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
-import { ArrowRight, Check } from 'lucide-react';
+import { useState } from 'react';
+import { useInViewport } from '@/hooks/use-in-viewport';
+import { ArrowRight, Check, Github, MessageCircle } from 'lucide-react';
 
 const perks = [
   'A desk in a forgotten library for 48 hours',
@@ -11,32 +12,36 @@ const perks = [
 ];
 
 export default function Register() {
-  const ref = useRef<HTMLDivElement>(null);
-  const [visible, setVisible] = useState(false);
+  const { ref, visible } = useInViewport(0.15);
   const [email, setEmail] = useState('');
+  const [github, setGithub] = useState('');
+  const [discord, setDiscord] = useState('');
   const [status, setStatus] = useState<'idle' | 'loading' | 'done' | 'error'>('idle');
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const obs = new IntersectionObserver(
-      ([e]) => e.isIntersecting && setVisible(true),
-      { threshold: 0.15 }
-    );
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, []);
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email.includes('@')) {
+    if (!email.includes('@') || !github.trim() || !discord.trim()) {
       setStatus('error');
       return;
     }
     setStatus('loading');
-    // Simulated reservation — wire to Supabase later if needed.
-    await new Promise((r) => setTimeout(r, 900));
-    setStatus('done');
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001'}/api/registrations`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, github, discord }),
+      });
+      if (!res.ok) {
+        const data = await res.json();
+        console.error('Registration failed:', data.error);
+        setStatus('error');
+        return;
+      }
+      setStatus('done');
+    } catch (err) {
+      console.error('Network error:', err);
+      setStatus('error');
+    }
   };
 
   return (
@@ -89,6 +94,7 @@ export default function Register() {
                   </h3>
                   <p className="text-sm text-on-surface/60">
                     We sent the details to {email}. Check your inbox in the morning.
+                    We will find you on GitHub ({github}) and Discord ({discord}).
                   </p>
                 </div>
               ) : (
@@ -113,8 +119,48 @@ export default function Register() {
                     />
                   </label>
 
+                  <label className="flex flex-col gap-2">
+                    <span className="font-feature-code text-xs uppercase tracking-[0.2em] text-on-surface/50">
+                      GitHub username
+                    </span>
+                    <div className="relative">
+                      <Github size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-on-surface/30" />
+                      <input
+                        type="text"
+                        required
+                        value={github}
+                        onChange={(e) => {
+                          setGithub(e.target.value);
+                          setStatus('idle');
+                        }}
+                        placeholder="your-github"
+                        className="w-full rounded-xl border border-white/10 bg-background/60 pl-9 pr-4 py-3.5 text-sm text-on-surface outline-none transition-all duration-300 placeholder:text-on-surface/30 focus:border-primary/50 focus:bg-background/80 focus:ring-2 focus:ring-primary/20"
+                      />
+                    </div>
+                  </label>
+
+                  <label className="flex flex-col gap-2">
+                    <span className="font-feature-code text-xs uppercase tracking-[0.2em] text-on-surface/50">
+                      Discord username
+                    </span>
+                    <div className="relative">
+                      <MessageCircle size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-on-surface/30" />
+                      <input
+                        type="text"
+                        required
+                        value={discord}
+                        onChange={(e) => {
+                          setDiscord(e.target.value);
+                          setStatus('idle');
+                        }}
+                        placeholder="your.discord"
+                        className="w-full rounded-xl border border-white/10 bg-background/60 pl-9 pr-4 py-3.5 text-sm text-on-surface outline-none transition-all duration-300 placeholder:text-on-surface/30 focus:border-primary/50 focus:bg-background/80 focus:ring-2 focus:ring-primary/20"
+                      />
+                    </div>
+                  </label>
+
                   {status === 'error' && (
-                    <p className="text-xs text-error">Please enter a valid email.</p>
+                    <p className="text-xs text-error">Please fill in all fields with valid info.</p>
                   )}
 
                   <button

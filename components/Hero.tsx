@@ -92,7 +92,7 @@ export default function Hero() {
               >
                 <div className="relative w-full overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] px-2 py-4 backdrop-blur-md transition-all duration-300 group-hover:border-primary/40 group-hover:bg-primary/[0.04]">
                   <div className="absolute inset-x-0 top-1/2 h-px bg-white/5" />
-                  <span className="font-feature-code block text-center text-3xl font-medium tabular-nums text-on-surface sm:text-4xl">
+                  <span suppressHydrationWarning className="font-feature-code block text-center text-3xl font-medium tabular-nums text-on-surface sm:text-4xl">
                     {String(u.value).padStart(2, '0')}
                   </span>
                 </div>

@@ -75,11 +75,13 @@ export default function MissionOrb() {
       transparent: true,
       opacity: 0.12,
     });
+    const lineGeos: THREE.BufferGeometry[] = [];
     nodes.forEach((n) => {
       const geo = new THREE.BufferGeometry().setFromPoints([
         new THREE.Vector3(0, 0, 0),
         n.position.clone(),
       ]);
+      lineGeos.push(geo);
       scene.add(new THREE.Line(geo, lineMat));
     });
 
@@ -116,6 +118,8 @@ export default function MissionOrb() {
       coreMat.dispose();
       nodeGeo.dispose();
       nodeMat.dispose();
+      lineMat.dispose();
+      lineGeos.forEach((g) => g.dispose());
       renderer.dispose();
       if (renderer.domElement.parentNode) {
         renderer.domElement.parentNode.removeChild(renderer.domElement);
