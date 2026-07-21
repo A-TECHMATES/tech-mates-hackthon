@@ -19,6 +19,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://a-techmates.github.io/tech-mates-hackthon'),
   title: 'Hidden Corners — A 48-Hour Buildathon',
   description:
     'A 48-hour buildathon where code becomes craft. Join 200 engineers, designers, and dreamers building the impossible in hidden corners.',
