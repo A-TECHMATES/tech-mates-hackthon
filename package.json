@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "postbuild": "touch out/.nojekyll",
+    "postbuild": "mkdir -p out && touch out/.nojekyll",
     "start": "next start",
     "lint": "next lint",
     "typecheck": "tsc --noEmit"
