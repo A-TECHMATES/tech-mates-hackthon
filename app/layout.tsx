@@ -1,37 +1,16 @@
 import './globals.css';
 import type { Metadata } from 'next';
-import { Inter, Space_Grotesk, JetBrains_Mono } from 'next/font/google';
-
-const inter = Inter({
-  subsets: ['latin'],
-  variable: '--font-inter',
-  display: 'swap',
-});
-const spaceGrotesk = Space_Grotesk({
-  subsets: ['latin'],
-  variable: '--font-space-grotesk',
-  display: 'swap',
-});
-const jetbrainsMono = JetBrains_Mono({
-  subsets: ['latin'],
-  variable: '--font-jetbrains-mono',
-  display: 'swap',
-});
+import { Providers } from './providers';
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://a-techmates.github.io/tech-mates-hackthon'),
-  title: 'Hidden Corners — A 48-Hour Buildathon',
+  title: 'CodeArena — Master Algorithms One Challenge at a Time',
   description:
-    'A 48-hour buildathon where code becomes craft. Join 200 engineers, designers, and dreamers building the impossible in hidden corners.',
+    'A modern algorithm challenge platform with learning tracks, dynamic input generation, competitions, and gamification. Master algorithms through guided journeys.',
   openGraph: {
-    title: 'Hidden Corners — A 48-Hour Buildathon',
+    title: 'CodeArena — Master Algorithms One Challenge at a Time',
     description:
-      'A 48-hour buildathon where code becomes craft. Join 200 engineers, designers, and dreamers.',
-    images: [{ url: 'https://bolt.new/static/og_default.png' }],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    images: [{ url: 'https://bolt.new/static/og_default.png' }],
+      'A modern algorithm challenge platform with learning tracks, dynamic input generation, competitions, and gamification.',
+    images: [{ url: '/og.png' }],
   },
 };
 
@@ -41,8 +20,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${inter.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable}`}>
-      <body>{children}</body>
+    <html lang="en">
+      <body>
+        <Providers>{children}</Providers>
+      </body>
     </html>
   );
 }

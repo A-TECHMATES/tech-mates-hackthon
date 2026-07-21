@@ -75,6 +75,7 @@ const config: Config = {
         'space': ['Space Grotesk', 'sans-serif'],
         'mono-code': ['JetBrains Mono', 'monospace'],
         'body': ['Inter', 'sans-serif'],
+        'sans': ['Inter', 'system-ui', 'sans-serif'],
       },
       keyframes: {
         'accordion-down': { from: { height: '0' }, to: { height: 'var(--radix-accordion-content-height)' } },
