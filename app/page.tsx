@@ -1,25 +1,23 @@
-import ParticlesBackground from '@/components/ParticlesBackground';
-import Navbar from '@/components/Navbar';
-import Hero from '@/components/Hero';
-import Mission from '@/components/Mission';
-import Build from '@/components/Build';
-import Architects from '@/components/Architects';
-import Register from '@/components/Register';
-import Footer from '@/components/Footer';
+'use client';
 
-export default function Home() {
+import { Navbar } from '@/components/layout/Navbar';
+import { Footer } from '@/components/layout/Footer';
+import { HeroSection } from '@/components/home/HeroSection';
+import { StatsSection } from '@/components/home/StatsSection';
+import { FeaturesSection } from '@/components/home/FeaturesSection';
+import { TracksSection } from '@/components/home/TracksSection';
+import { CTASection } from '@/components/home/CTASection';
+
+export default function HomePage() {
   return (
-    <main className="relative min-h-screen overflow-hidden bg-background text-on-surface">
-      <ParticlesBackground />
-      <div className="relative z-10 noise-overlay">
-        <Navbar />
-        <Hero />
-        <Mission />
-        <Build />
-        <Architects />
-        <Register />
-        <Footer />
-      </div>
+    <main className="min-h-screen">
+      <Navbar />
+      <HeroSection />
+      <StatsSection />
+      <FeaturesSection />
+      <TracksSection />
+      <CTASection />
+      <Footer />
     </main>
   );
 }
